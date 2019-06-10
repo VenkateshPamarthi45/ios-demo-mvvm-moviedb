@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol MovieRepository {
+protocol MovieInteractor {
     func fetchMoviesApi(pageId:String, closure : @escaping (MovieListingReponse)-> Void)
 }

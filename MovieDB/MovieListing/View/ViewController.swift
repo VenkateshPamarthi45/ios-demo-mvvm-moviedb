@@ -13,33 +13,38 @@ class ViewController: UIViewController,MovieListItemListener {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet var movieListingDataSource : MovieListingDataSource!
     private var clickedItemData:Movie?
-    
-    let data = ["AAA","BBB" ,"CCC","AAA","BBB" ,"CCC","AAA","BBB" ,"CCC","AAA","BBB" ,"CCC"]
+    private var presenter = (UIApplication.shared.delegate as? AppDelegate)?.mainAssembler.resolver.resolve(MovieListingPresenterImpl.self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("display progress bar")
-        MovieRepositoryConfirms().fetchMoviesApi(pageId: "1") { (movieListingResponse) in
-            print("hide progress bar")
-            print("view controller response \(movieListingResponse)")
-            if let movies = movieListingResponse.results {
-                self.movieListingDataSource = MovieListingDataSource(data: movies, listener: self)
-                self.collectionView.delegate = self.movieListingDataSource
-                self.collectionView.dataSource = self.movieListingDataSource
-            }else{
-                print("No Movies")
-            }
+        presenter?.fetchMovies(pageId: "1", closure: { (movieListingResponse) in
+            self.builtCollectionViewForFirstTimeWithMovies(movieListingResponse: movieListingResponse)
+        })
+    }
+    /**
+     This method helps render collection view for the first time
+     - parameters:
+     - movieListingResponse : is instance of MovieListingResponse
+     
+     */
+    func builtCollectionViewForFirstTimeWithMovies(movieListingResponse: MovieListingReponse){
+        if let movies = movieListingResponse.results {
+            self.movieListingDataSource = MovieListingDataSource(data: movies, listener: self)
+            self.collectionView.delegate = self.movieListingDataSource
+            self.collectionView.dataSource = self.movieListingDataSource
+        }else{
+            print("No Movies")
         }
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
     
     /**
-        This method used as callback from @MovieListingDataSource
-        - parameters:
-            - data : this is data of selected item in collection view
+     This method used as callback from @MovieListingDataSource
+     - parameters:
+     - data : this is data of selected item in collection view
      */
     func onItemClick(movie: Movie) {
         clickedItemData = movie
@@ -50,6 +55,6 @@ class ViewController: UIViewController,MovieListItemListener {
         let destination = segue.destination as? MovieDetailViewController
         destination?.movie = clickedItemData
     }
-
+    
 }
 

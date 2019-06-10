@@ -10,7 +10,7 @@ import Foundation
 
 import Alamofire
 
-class MovieRepositoryConfirms:MovieRepository{
+class MovieInteractorImpl:MovieInteractor{
     
     func fetchMoviesApi(pageId: String, closure: @escaping (MovieListingReponse)->Void) {
         Alamofire.request(Constants.BASE_URL+"movie/top_rated?"+Constants.API_KEY+"&language=en-US&page="+pageId).responseJSON { response in
