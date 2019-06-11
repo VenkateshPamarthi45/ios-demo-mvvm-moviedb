@@ -11,7 +11,7 @@ import Swinject
 
 class MovieListingPresenterImpl : MovieListingPresenter{
     
-    private var movieInteractor : MovieInteractor?
+    var movieInteractor : MovieInteractor?
     
     init(movieInteractor:MovieInteractor) {
         self.movieInteractor = movieInteractor

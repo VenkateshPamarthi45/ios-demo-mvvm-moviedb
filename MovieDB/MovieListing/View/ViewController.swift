@@ -13,7 +13,7 @@ class ViewController: UIViewController,MovieListItemListener {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet var movieListingDataSource : MovieListingDataSource!
     private var clickedItemData:Movie?
-    private var presenter = (UIApplication.shared.delegate as? AppDelegate)?.mainAssembler.resolver.resolve(MovieListingPresenterImpl.self)
+    var presenter = (UIApplication.shared.delegate as? AppDelegate)?.mainAssembler.resolver.resolve(MovieListingPresenterImpl.self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,11 +21,11 @@ class ViewController: UIViewController,MovieListItemListener {
             self.builtCollectionViewForFirstTimeWithMovies(movieListingResponse: movieListingResponse)
         })
     }
+    
     /**
      This method helps render collection view for the first time
      - parameters:
      - movieListingResponse : is instance of MovieListingResponse
-     
      */
     func builtCollectionViewForFirstTimeWithMovies(movieListingResponse: MovieListingReponse){
         if let movies = movieListingResponse.results {
