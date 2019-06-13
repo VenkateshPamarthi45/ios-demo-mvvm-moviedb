@@ -9,5 +9,5 @@
 import Foundation
 
 protocol MovieInteractor {
-    func fetchMoviesApi(pageId:String, closure : @escaping (MovieListingReponse)-> Void)
+    func fetchMoviesFromDataSource(pageId:String, closure : @escaping (MovieListingReponse)-> Void)
 }

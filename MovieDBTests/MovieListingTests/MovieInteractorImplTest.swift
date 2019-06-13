@@ -11,17 +11,17 @@ import XCTest
 
 class MovieInteractorImplTest: XCTestCase {
 
-    var sut = MovieInteractorImpl()
+    var sut : MovieInteractorImpl!
+    var mockClass : MockMovieListingServiceImpl!
+    
+    override func setUp() {
+        mockClass = MockMovieListingServiceImpl()
+        sut = MovieInteractorImpl(movieLisingService: mockClass)
+    }
     func test_ApiResponse(){
-        sut.fetchMoviesApi(pageId: "1") { (response) in
-            XCTAssertNotNil(response)
-            let movie = response.results?[0]
-            XCTAssertNotNil(movie)
-            XCTAssertNotNil(movie?.adult)
-            if let adultMovie = movie?.adult{
-                XCTAssertTrue(!adultMovie)
-            }
+        sut.fetchMoviesFromDataSource(pageId: "1") { (response) in
         }
+        XCTAssertTrue(mockClass.didFetchMoviesApiCalled)
     }
 
 }

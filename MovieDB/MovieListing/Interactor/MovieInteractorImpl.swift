@@ -7,32 +7,36 @@
 //
 
 import Foundation
-
-import Alamofire
+import Swinject
 
 class MovieInteractorImpl:MovieInteractor{
     
-    func fetchMoviesApi(pageId: String, closure: @escaping (MovieListingReponse)->Void) {
-        Alamofire.request(Constants.BASE_URL+"movie/top_rated?"+Constants.API_KEY+"&language=en-US&page="+pageId).responseJSON { response in
-            if(response.response?.statusCode == 200){
-                let json = response.data
-                do{
-                    let decoder = JSONDecoder()
-                    let movieListingResponse = try decoder.decode(MovieListingReponse.self, from: json!)
-                    closure(movieListingResponse)
-                }catch let err{
-                    print(err)
-                }
-            }else{
-                if let json = response.result.value {
-                    print("JSON: \(json)") // serialized json response
-                }
-            }
-            if let data = response.data, let utf8Text = String(data: data, encoding: .utf8) {
-                print("Data: \(utf8Text)") // original server data as UTF8 string
-            }
-        }
+    var movieListingService:MovieListingService
+    
+    init(movieLisingService:MovieListingService) {
+        self.movieListingService = movieLisingService
     }
     
-    
+    /**
+     Here in this method data is fetched from api or local database
+     - parameters:
+        - pageId : this is the page id of the api
+        - closure : this is used to return movie listing response
+     */
+    func fetchMoviesFromDataSource(pageId: String, closure: @escaping (MovieListingReponse)->Void) {
+        movieListingService.fetchTopRatedMovies(pageId: pageId) { (response) in
+            closure(response)
+        }
+    }
+}
+
+
+
+class MovieInteractorImplAssembly : Assembly{
+    func assemble(container: Container) {
+        container.register(MovieInteractorImpl.self, factory: { r in
+            let movieListingService = MovieListingServiceImpl()
+            return MovieInteractorImpl(movieLisingService: movieListingService)
+        }).inObjectScope(.weak)
+    }
 }

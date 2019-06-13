@@ -15,7 +15,8 @@ class MovieListingPresenterImplTest: XCTestCase {
     var sut : MovieListingPresenterImpl!
     
     override func setUp() {
-        mockClass = MockMovieListingInteractorImpl()
+        let movieListingService = MockMovieListingServiceImpl()
+        mockClass = MockMovieListingInteractorImpl(movieListingService: movieListingService)
         sut = MovieListingPresenterImpl(movieInteractor: mockClass)
     }
 

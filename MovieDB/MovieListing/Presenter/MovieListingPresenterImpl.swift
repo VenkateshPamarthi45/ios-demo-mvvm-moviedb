@@ -18,7 +18,7 @@ class MovieListingPresenterImpl : MovieListingPresenter{
     }
     
     func fetchMovies(pageId: String, closure : @escaping (MovieListingReponse)-> Void) {
-        movieInteractor?.fetchMoviesApi(pageId: pageId, closure: { (response) in
+        movieInteractor?.fetchMoviesFromDataSource(pageId: pageId, closure: { (response) in
             print("return from movie repository \(response)")
             closure(response)
         })
@@ -30,10 +30,8 @@ class MovieListingPresenterImpl : MovieListingPresenter{
 class MovieListingPresenterImplAssembly : Assembly{
     func assemble(container: Container) {
         container.register(MovieListingPresenterImpl.self, factory: { r in
-            let movieInteractor = MovieInteractorImpl()
-            return MovieListingPresenterImpl(movieInteractor: movieInteractor)
+            let movieInteractor = r.resolve(MovieInteractorImpl.self)
+            return MovieListingPresenterImpl(movieInteractor: movieInteractor!)
         }).inObjectScope(.weak)
     }
-    
-    
 }
