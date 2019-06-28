@@ -8,19 +8,20 @@
 
 import Foundation
 @testable import MovieDB
+import RxSwift
 
-class MockMovieListingInteractorImpl: MovieInteractor{
+
+class MockMovieListingInteractorImpl: MovieRepository{
+    func fetchMoviesFromDataSource(pageId: String) -> Single<MovieListingReponse> {
+        didFetchMoviesApiCalled = true
+        return movieListingService.fetchTopRatedMovies(pageId: pageId)
+    }
+    
     var didFetchMoviesApiCalled = false
     var movieListingService:MovieListingService
     
     init(movieListingService: MovieListingService) {
         self.movieListingService = movieListingService
-    }
-    func fetchMoviesFromDataSource(pageId: String, closure: @escaping (MovieListingReponse) -> Void) {
-        didFetchMoviesApiCalled = true
-        movieListingService.fetchTopRatedMovies(pageId: pageId) { (response) in
-            closure(response)
-        }
     }
 
 }

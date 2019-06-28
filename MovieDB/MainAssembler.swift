@@ -16,7 +16,7 @@ class MainAssembler{
     }
     let assembler = Assembler()
     init() {
-        assembler.apply(assemblies: [MovieListingPresenterImplAssembly(), MovieInteractorImplAssembly()])
+        assembler.apply(assemblies: [MovieListingViewModelImplAssembly(), MovieRepositoryImplAssembly()])
     }
     
 }

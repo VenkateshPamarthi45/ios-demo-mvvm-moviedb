@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import RxSwift
 
-protocol MovieListingPresenter {
+protocol MovieListingViewModel {
     
-    func fetchMovies(pageId:String, closure : @escaping (MovieListingReponse)-> Void)
+    func fetchMovies(pageId:String)->Single<MovieListingReponse>
 }

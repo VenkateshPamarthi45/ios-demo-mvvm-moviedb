@@ -7,7 +7,8 @@
 //
 
 import Foundation
+import RxSwift
 
-protocol MovieInteractor {
-    func fetchMoviesFromDataSource(pageId:String, closure : @escaping (MovieListingReponse)-> Void)
+protocol MovieRepository {
+    func fetchMoviesFromDataSource(pageId:String) -> Single<MovieListingReponse>
 }

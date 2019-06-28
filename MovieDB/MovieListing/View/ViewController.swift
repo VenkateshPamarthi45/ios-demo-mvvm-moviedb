@@ -7,25 +7,30 @@
 //
 
 import UIKit
+import RxSwift
 
 class ViewController: UIViewController,MovieListItemListener {
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet var movieListingDataSource : MovieListingDataSource!
     private var clickedItemData:Movie?
-    var presenter = (UIApplication.shared.delegate as? AppDelegate)?.mainAssembler.resolver.resolve(MovieListingPresenterImpl.self)
+    private var disposableBag = DisposeBag()
+    
+    var viewModel = (UIApplication.shared.delegate as? AppDelegate)?.mainAssembler.resolver.resolve(MovieListingViewModelImpl.self)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        presenter?.fetchMovies(pageId: "1", closure: { (movieListingResponse) in
-            self.builtCollectionViewForFirstTimeWithMovies(movieListingResponse: movieListingResponse)
-        })
+        viewModel?.fetchMovies(pageId: "1").subscribe(onSuccess: { (movieListingResponse) in
+          self.builtCollectionViewForFirstTimeWithMovies(movieListingResponse: movieListingResponse)
+        }, onError: { (err) in
+            print(err)
+        }).disposed(by: disposableBag)
     }
     
     /**
      This method helps render collection view for the first time
      - parameters:
-     - movieListingResponse : is instance of MovieListingResponse
+        - movieListingResponse : is instance of MovieListingResponse
      */
     func builtCollectionViewForFirstTimeWithMovies(movieListingResponse: MovieListingReponse){
         if let movies = movieListingResponse.results {

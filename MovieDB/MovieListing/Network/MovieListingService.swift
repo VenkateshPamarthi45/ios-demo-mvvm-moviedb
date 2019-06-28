@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import RxSwift
 
 
 protocol MovieListingService {
-    func fetchTopRatedMovies(pageId:String, closure:@escaping (MovieListingReponse)->Void)
+    func fetchTopRatedMovies(pageId:String)-> Single<MovieListingReponse>
 }
